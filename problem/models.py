@@ -5,7 +5,7 @@ import datetime
 import configparser
 
 config = configparser.ConfigParser()
-config.read('problem/config')
+config.read('problem/config.ini')
 host = config['config']['connection']
 db = config['config']['problem_set_system_db']
 connect(db, host=host)
