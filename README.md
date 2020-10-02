@@ -6,10 +6,10 @@
 To run back-end \
 $env:FLASK_APP="app.py"  \
 $env:FLASK_ENV="development"\
-py -m flask run \
+py -m flask run 
 
 To run front-end \
-npm start \
+npm start 
 
 Languages used:
 - Python 3+
