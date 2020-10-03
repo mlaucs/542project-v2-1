@@ -94,10 +94,11 @@ class ViewProblem extends Component {
 
     render() { 
         const columns = [
-            {Header: "Problem Description", accessor: "description"},
-            {Header: "Category", accessor: "category"},
+            {Header: "#", accessor: "questionNo"},
+            {Header: "Problem", accessor: "question"},
+            // {Header: "Category", accessor: "category"},
             {Header: "Sub Category", accessor: "sub_category"},
-            {Header: "Last Review Date", accessor: "review_dates[0]"},
+            // {Header: "Last Review Date", accessor: "last_review_date"},
             {
                 Header: "Actions",
                 filterable: false,

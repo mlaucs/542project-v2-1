@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Form, Button, Col} from 'react-bootstrap';
+import Moment from 'moment';
 
 class ProblemFormComponent extends Component {
 
@@ -38,7 +39,7 @@ class ProblemFormComponent extends Component {
         if(ctrl == 'a'){
             this.setState({ showAnswer: !this.state.showAnswer });
         }
-        if(ctrl == 'h'){
+        if(ctrl == 'n'){
             this.setState({ showHint: !this.state.showHint });
         }
       }
@@ -72,37 +73,38 @@ class ProblemFormComponent extends Component {
         return <Form.Control as="textarea" rows={3} placeholder="Answer" name="answer" value={a}/>;
     }
 
-    hintFormControl(hint){
+    noteFormControl(hint){
         let h = '';
         const show = (this.state.showHint) ? true : false ;
         if(show==true){
             h = hint;
         }
-        return <Form.Control type="text" placeholder="Hint" name="hint" value={h}/>
+        return <Form.Control as="textarea" rows={3} placeholder="Note" name="note" value={h}/>
     }
      
     renderForm(){
         if (this.props.data){
+            var newDate = Moment(new Date(this.props.data.last_review_date * 1000)).format('MM/DD/YYYY hh:MM');
             return (                
                 <Form>
+                    <Form.Group controlId="question">
+                        <Form.Label>Question</Form.Label>
+                        <Form.Control as="textarea" rows={1} placeholder="Question" name="question" value={this.props.data.question}/>
+                    </Form.Group>
+
                     <Form.Group controlId="description">
-                        <Form.Label>The Question or Problem Description</Form.Label>
-                        <Form.Control as="textarea" rows={1} placeholder="Question or Problem Description" name="description" value={this.props.data.description}/>
+                        <Form.Label>Description</Form.Label>
+                        <Form.Control as="textarea" rows={3} placeholder="Description" name="description" value={this.props.data.description}/>
                     </Form.Group>
                     
-                    <Form.Group controlId="hint">
-                        <Form.Label><Button variant="outline-info" onClick={e => this.toggleContent('h')}>Hint</Button></Form.Label>
-                        {this.hintFormControl(this.props.data.hint)}
+                    <Form.Group controlId="note">
+                        <Form.Label><Button variant="outline-info" onClick={e => this.toggleContent('n')}>Note</Button></Form.Label>
+                        {this.noteFormControl(this.props.data.note)}
                     </Form.Group>
         
                     <Form.Group controlId="answer">
                         <Form.Label> <Button variant="outline-info" onClick={e => this.toggleContent('a')}>Answer</Button> </Form.Label>
                         {this.answerFormControl(this.props.data.answer)}
-                    </Form.Group>
-        
-                    <Form.Group controlId="note">
-                        <Form.Label>Note</Form.Label>
-                        <Form.Control as="textarea" rows={3} placeholder="Note" name="note" value={this.props.data.note}/>
                     </Form.Group>
         
                     <Form.Row>
@@ -111,10 +113,10 @@ class ProblemFormComponent extends Component {
                             <Form.Control type="text" placeholder="Importance (1-10)" name="importance"  value={this.props.data.importance}/>
                         </Form.Group>
         
-                        <Form.Group as={Col} controlId="category">
+                        {/* <Form.Group as={Col} controlId="category">
                             <Form.Label>Category</Form.Label>
                             <Form.Control type="text" placeholder="Category" name="category"  value={this.props.data.category}/>
-                        </Form.Group>
+                        </Form.Group> */}
         
                         <Form.Group as={Col} controlId="subCategory">
                             <Form.Label>Sub Category</Form.Label>
@@ -123,7 +125,7 @@ class ProblemFormComponent extends Component {
                         
                         <Form.Group as={Col} controlId="lastReviewDate">
                             <Form.Label>Last Review Date</Form.Label>
-                            <Form.Control type="text" placeholder="Last Review Date" name="lastReviewDate" value={this.props.data.review_date}/>
+                            <Form.Control type="text" placeholder="Last Review Date" name="lastReviewDate" value={newDate}/>
                         </Form.Group>
                     </Form.Row>
         
