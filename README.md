@@ -1,12 +1,12 @@
 # StudyPlanner
 
-- Visual studio code with python virtual environment \
-1) Create virtual environment: python3 -m venv .venv \
-2) Activate virtual environment: .venv\Scripts\Activate.ps1 or select in visual studio code \
-3) You should see (.venv) in the command line \
+- Visual studio code with python virtual environment 
+1) Create virtual environment: python3 -m venv .venv 
+2) Activate virtual environment: .venv\Scripts\Activate.ps1 or select in visual studio code 
+3) You should see (.venv) in the command line 
 
 Packages needed (pip install / py -m pipinstall) \
-Install all the necessary packages you see from the console error \
+Install all the necessary packages you see from the console error 
 
 (Windows 10) To run back-end \
 $env:FLASK_APP="app.py"  \
