@@ -108,10 +108,10 @@ class AddProblem extends Component {
                             <Form.Control type="text" placeholder="Sub Category" name="subCategory" onChange={this.onChange} value={subCategory}/>
                         </Form.Group>
                         
-                        <Form.Group as={Col} controlId="lastReviewDate">
+                        {/* <Form.Group as={Col} controlId="lastReviewDate">
                             <Form.Label>Last Review Date</Form.Label>
                             <Form.Control type="text" placeholder="Last Review Date" name="lastReviewDate" onChange={this.onChange} value={lastReviewDate}/>
-                        </Form.Group>
+                        </Form.Group> */}
                     </Form.Row>
 
                     <Button variant="primary" onClick={this.onSubmit}>

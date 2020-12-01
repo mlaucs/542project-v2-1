@@ -1,4 +1,4 @@
-from flask import Flask,jsonify, request
+from flask import Flask,jsonify, request, Response
 from mongoengine import *
 from mongoengine.queryset.visitor import Q
 import datetime
@@ -11,6 +11,8 @@ db = config['config']['problem_set_system_db']
 connect(db, host=host)
 
 class Problem(Document):
+    question = StringField()
+    questionNo = IntField()
     description = StringField(required=True)
     answer = StringField(required=True)
     hint = StringField()
@@ -20,6 +22,7 @@ class Problem(Document):
     category = StringField(required=True)
     sub_category = StringField()
     review_dates = ListField()
+    last_review_date = DateTimeField()
     add_date = DateTimeField()
     modify_date = DateTimeField()
 
@@ -43,9 +46,34 @@ def addProblem():
         p.modify_date = datetime.datetime.now()
         #printProblem(p)
         p.save()
-        return 'OK'
-    except:
-        return 'Error - data is not added to db'
+        return Response("OK", status=200)
+    except Exception as e:
+        return Response("Data is not added " + str(e), status=400)
+
+def editProblem(_id):
+    try:
+        req_data = request.get_json(force=True)
+        p = Problem.objects.get(id=_id)
+        printProblem(p)
+        if p:
+            p.question = req_data['question']
+            p.questionNo = req_data['questionNo']
+            p.description = req_data['description']
+            p.answer = req_data['answer']
+            #p.hint = req_data['hint']
+            p.note = req_data['note']
+            p.importance = req_data['importance']
+            p.category = req_data['category']
+            p.sub_category = req_data['sub_category']
+            #p.review_dates.append(req_data['lastReviewDate'])
+            p.add_date = datetime.datetime.now()
+            p.modify_date = datetime.datetime.now()
+            p.save()
+            return Response("OK", status=200)
+
+        return Response("Problem not found", status=404)
+    except Exception as e:
+        return Response("Data is not updated " + str(e), status=400)
 
 def getAllProblems():
     problems = Problem.objects()

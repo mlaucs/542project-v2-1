@@ -24,7 +24,8 @@ def getProblemByObjectId(id):
 
 @app.route('/problem/edit/<id>', methods=["PUT"])
 def updateProblemById(id):
-    return "update a problem by Id:" + str(id)
+    return editProblem(id)
+    #return "update a problem by Id:" + str(id)
 
 @app.route('/problem/delete/<id>', methods=["DELETE"])
 def deleteProblemByObjectId(id):

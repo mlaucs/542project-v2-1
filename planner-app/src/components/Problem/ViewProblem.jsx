@@ -94,7 +94,7 @@ class ViewProblem extends Component {
 
     render() { 
         const columns = [
-            {Header: "#", accessor: "questionNo"},
+            // {Header: "#", accessor: "questionNo"},
             {Header: "Problem", accessor: "question"},
             // {Header: "Category", accessor: "category"},
             {Header: "Sub Category", accessor: "sub_category"},
