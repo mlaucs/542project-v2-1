@@ -13,8 +13,9 @@ $env:FLASK_APP="app.py"  \
 $env:FLASK_ENV="development"\
 py -m flask run 
 
-(Linux)
-py -m flask run
+(Linux) \
+export FLASK_DEBUG=1 \
+py/python -m flask run
 
 To run front-end \
 npm start 
