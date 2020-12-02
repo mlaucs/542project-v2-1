@@ -5,14 +5,15 @@ import './Problem.css';
 import { Redirect } from 'react-router-dom';
 
 class AddProblem extends Component {
-    state = {  
+    state = { 
+        questionNo: 0,
+        question: '',
         description: '',
         answer:'',
-        hint:'',
         note:'',
         importance:'',
         category:'',
-        subCategory:'',
+        sub_category:'',
         lastReviewDate:'',
         isAdded: undefined
     };
@@ -50,13 +51,14 @@ class AddProblem extends Component {
 
     render() { 
         const {
+            questionNo,
+            question,
             description,
             answer,
-            hint,
             note,
             importance,
             category,
-            subCategory,
+            sub_category,
             lastReviewDate
         } = this.state;
 
@@ -72,19 +74,19 @@ class AddProblem extends Component {
         return (  
             <Card body>
                 <Form>
+                    <Form.Group controlId="question">
+                        <Form.Label>Question</Form.Label>
+                        <Form.Control as="textarea" rows={1} placeholder="Question" name="question" onChange={this.onChange} value={question}/>
+                    </Form.Group>
+
                     <Form.Group controlId="description">
-                        <Form.Label>The Question or Problem Description</Form.Label>
-                        <Form.Control as="textarea" rows={1} placeholder="Question or Problem Description" name="description" onChange={this.onChange} value={description}/>
+                        <Form.Label>Question Description</Form.Label>
+                        <Form.Control as="textarea" rows={5} placeholder="Question Description" name="description" onChange={this.onChange} value={description}/>
                     </Form.Group>
 
                     <Form.Group controlId="answer">
                         <Form.Label>Answer</Form.Label>
-                        <Form.Control as="textarea" rows={3} placeholder="Answer" name="answer" onChange={this.onChange} value={answer}/>
-                    </Form.Group>
-
-                    <Form.Group controlId="hint">
-                        <Form.Label>Hint</Form.Label>
-                        <Form.Control type="text" placeholder="Hint" name="hint" onChange={this.onChange} value={hint}/>
+                        <Form.Control as="textarea" rows={5} placeholder="Answer" name="answer" onChange={this.onChange} value={answer}/>
                     </Form.Group>
 
                     <Form.Group controlId="note">
@@ -103,9 +105,9 @@ class AddProblem extends Component {
                             <Form.Control type="text" placeholder="Category" name="category" onChange={this.onChange} value={category}/>
                         </Form.Group>
 
-                        <Form.Group as={Col} controlId="subCategory">
+                        <Form.Group as={Col} controlId="sub_category">
                             <Form.Label>Sub Category</Form.Label>
-                            <Form.Control type="text" placeholder="Sub Category" name="subCategory" onChange={this.onChange} value={subCategory}/>
+                            <Form.Control type="text" placeholder="Sub Category" name="sub_category" onChange={this.onChange} value={sub_category}/>
                         </Form.Group>
                         
                         {/* <Form.Group as={Col} controlId="lastReviewDate">

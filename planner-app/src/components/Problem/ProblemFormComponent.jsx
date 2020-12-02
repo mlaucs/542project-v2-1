@@ -1,26 +1,13 @@
 import React, { Component } from 'react';
-import {Form, Button, Col} from 'react-bootstrap';
+import {Form, Button, Col, Alert} from 'react-bootstrap';
 import Moment from 'moment';
 
 class ProblemFormComponent extends Component {
 
     constructor(props) {
         super(props);
-        // this.state = { 
-        //     description: 'fake description',
-        //     answer: '1+1=2',
-        //     hint: 'math 101',
-        //     note: 'the math you leanred when you were 3',
-        //     importance: '1',
-        //     category: 'math101',
-        //     sub_category: 'elementery',
-        //     review_date: '09/03/1994',
-        //     mode: '',
-        //     showAnswer: false,
-        //     showHint: false
-        //  }
         this.state = { 
-            id: this.props.data._id.$oid,
+            id: this.props.data._id ? this.props.data._id.$oid : this.props.data.id,
             questionNo: this.props.data.questionNo,
             question: this.props.data.question,
             description: this.props.data.description,
@@ -69,6 +56,7 @@ class ProblemFormComponent extends Component {
         });
      }
 
+     
     answerFormControl(answer){
         let a = '';
         const show = (this.state.showAnswer) ? true : false ;
@@ -87,10 +75,6 @@ class ProblemFormComponent extends Component {
         return <Form.Control as="textarea" rows={3} placeholder="Note" name="note" defaultValue={h} onChange={this.handleChange}/>
     }
     
-    onSaveTest = async() =>{
-        const p = this.state;
-        console.log(p);
-    };
 
     onSave = async() =>{
         const p = this.state;
@@ -101,15 +85,16 @@ class ProblemFormComponent extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(p)
+        }).then(
+            response => {
+                if(response.ok){
+                    this.props.onSave(p);
+                }
+                else{
+                    alert("Error " + response.status + " " + response.statusText);
+                }
         });
-        if (response.ok){
-            console.log("data is deleted");
-            this.setState({
-                isDeleted : true
-            });
-        }
     }
-
 
     handleChange(event) {    
         const target = event.target;
@@ -118,6 +103,15 @@ class ProblemFormComponent extends Component {
         this.setState({
           [name]: value    
         });
+    }
+
+    // onSaveTest = async() =>{
+    //     const p = this.state;
+    //     console.log(p);
+    // };
+
+    onSaveTest = () => {
+        this.props.onSave();            
     }
 
     renderForm(){
@@ -200,7 +194,7 @@ class ProblemFormComponent extends Component {
 
                     </Form.Row>
         
-                    <Button variant="primary" onClick={this.onSaveTest}>
+                    <Button variant="primary" onClick={this.onSave}>
                         Save
                     </Button>
         

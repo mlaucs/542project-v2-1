@@ -11,8 +11,26 @@ import ProblemFormComponent from './ProblemFormComponent';
 function renderChildComponent() {
     const {problem} = this.state;
 
+    const handleOnSave = (p) => {
+        this.setState({
+            openDetailModal: false, 
+            problem:p
+        });
+        
+        let data = this.state.problems;
+        let index = data.findIndex(function(c) { 
+            return c._id && c._id.$oid == p.id; 
+        });
+        
+        data.splice(index, 1, p);
+
+        this.setState({
+            problems: data
+        });
+    }
+
     if (problem) {
-        return <ProblemFormComponent data={problem}></ProblemFormComponent>
+        return <ProblemFormComponent data={problem} onSave={handleOnSave}></ProblemFormComponent>
     }
 
     return <p>Loading</p>
@@ -44,7 +62,7 @@ class ViewProblem extends Component {
 
     viewDetail(id){
         const data = this.state.problems.find(p => {
-          return p._id.$oid === id
+          return p._id && (p._id.$oid === id) || (p.id === id)
         });
         if(data){
             this.setState({
@@ -72,7 +90,7 @@ class ViewProblem extends Component {
     remove(id){
         const url = '/problem/delete/' + id;
         const index = this.state.problems.findIndex(p => {
-            return p._id.$oid === id
+            return p._id && p._id.$oid === id
           });
         this.state.problems.splice(index, 1);
         this.setState({
@@ -85,7 +103,7 @@ class ViewProblem extends Component {
             },
         });
         if (response.ok){
-            console.log("data is deleted");
+            //console.log("data is deleted");
             this.setState({
                 isDeleted : true
             });
@@ -96,7 +114,7 @@ class ViewProblem extends Component {
         const columns = [
             // {Header: "#", accessor: "questionNo"},
             {Header: "Problem", accessor: "question"},
-            // {Header: "Category", accessor: "category"},
+            {Header: "Category", accessor: "category"},
             {Header: "Sub Category", accessor: "sub_category"},
             // {Header: "Last Review Date", accessor: "last_review_date"},
             {
@@ -104,19 +122,20 @@ class ViewProblem extends Component {
                 filterable: false,
                 sortable: false,
                 resizable: false,
-                Cell: porps =>{
+                Cell: props =>{
                   return(
                       <div>
                         <Button
                         onClick={(e)=> {
-                            this.viewDetail(porps.original._id.$oid);
+                            console.log(props);
+                            this.viewDetail(props.original._id ? props.original._id.$oid : props.id);
                         }}><FaBookReader /></Button>
 
                         <span style={{"paddingLeft": "20px"}} >
                             <Button
                             variant="danger"
                             onClick={(e)=> {
-                                this.remove(porps.original._id.$oid);
+                                this.remove(props.original._id.$oid);
                             }}><IoMdRemoveCircleOutline /></Button>
                         </span>
 

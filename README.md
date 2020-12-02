@@ -18,6 +18,7 @@ export FLASK_DEBUG=1 \
 py/python -m flask run
 
 To run front-end \
+go to planner-app folder and open the terminal from here
 npm start 
 
 Languages used:

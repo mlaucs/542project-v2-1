@@ -20,21 +20,14 @@ def getProblemByKeyword(keyword:str):
 @app.route('/problem/<id>', methods=["GET"])
 def getProblemByObjectId(id):
     return getProblemById(id)
-    #return "get a problem by Id:" + str(id)
 
 @app.route('/problem/edit/<id>', methods=["PUT"])
 def updateProblemById(id):
     return editProblem(id)
-    #return "update a problem by Id:" + str(id)
 
 @app.route('/problem/delete/<id>', methods=["DELETE"])
 def deleteProblemByObjectId(id):
-    ret = deleteProblemById(id)
-    if ret == True:
-        return 'item is deleted'
-    else:
-        return 'error'
-    #return "delete a problem by Id:" + str(id)
+    return deleteProblemById(id)
 
 @app.route('/problem/review')
 def reviewProblem():
