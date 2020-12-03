@@ -194,7 +194,7 @@ class ProblemFormComponent extends Component {
 
                     </Form.Row>
         
-                    <Button variant="primary" onClick={this.onSave}>
+                    <Button id="save" variant="primary" onClick={this.onSave}>
                         Save
                     </Button>
         

@@ -61,7 +61,7 @@ describe('Demo Test Suite', () => {
             cy.get('textarea[id="question"]').type('Car mpg')
             cy.get('textarea[id="description"]').type('A car got 33 miles per gallon using gasoline that cost $2.95 per gallon. Approximately what was the cost, in dollars, of the gasoline used in driving the car 350 miles?\nA. $10\nB. $20\nC. $30\nD. $40\nE. $50')
             cy.get('textarea[id="answer"]').type('C. $30')
-            cy.get('textarea[id="note"]').type('Scanning the answer choices indicates that you can do at least some estimation and still answer confidently. The car used 350 over 33 gallons of gasoline, so the cost was Open parenthesis, 350 over 33, close parenthesis, times 2.95 dollars. You can estimate the product Open parenthesis, 350 over 33, close parenthesis, times 2.95 by estimating 350 over 33 a little low, 10, and estimating 2.95 a little high, 3, to get approximately 10 times 3 = 30 dollars. You can also use the calculator to compute a more exact answer and then round the answer to the nearest 10 dollars, as suggested by the answer choices. The calculator yields the decimal 31 point two, eight, seven, dot, dot, dot. which rounds to 30 dollars. Thus the correct answer is Choice C, $30.')
+            cy.get('textarea[id="note"]').type('The car used 350 over 33 gallons of gasoline, so the cost was (350 over 33) * 2.95 dollars. You can estimate the product (350 over 33) * 2.95 by estimating 350 over 33 a little low, 10, and estimating 2.95 a little high, 3, to get approximately 10 times 3 = 30 dollars. The calculator yields the decimal 31.287... which rounds to 30 dollars. Thus the correct answer is Choice C, $30.')
 
             //fill in the three inputs
             cy.get('input[id="importance"]').type('5')
@@ -71,12 +71,13 @@ describe('Demo Test Suite', () => {
             //click submit
             cy.contains('Submit').click()
 
+            //search for "Car" in the Problem column
             cy.get('div[class="rt-table"]')
             .find('div[class="rt-thead -filters"]')
             .find('div[class="rt-tr"]')
             .find('div[role="columnheader"]').first().type('Car')
 
-            //it returns something
+            //table query results
             cy.get('div[class="rt-table"]')
             .find('div[class="rt-tbody"]')
             .find('div[class="rt-tr-group"]').contains('Car').should(($tr) => {
@@ -107,7 +108,7 @@ describe('Demo Test Suite', () => {
             .find('div[class="rt-tr"]')
             .find('div[role="columnheader"]').should('have.length', 4)
 
-            //by default it loads 10 rows
+            //by default should load 10 rows
             cy.get('div[class="rt-table"]')
             .find('div[class="rt-tbody"]')
             .find('div[class="rt-tr-group"]').should('have.length', 10)
@@ -119,11 +120,13 @@ describe('Demo Test Suite', () => {
             cy.contains('Problem Set').click()
             cy.contains('View Problem Sets').click()
 
+            //enter 'Car' into Problem column
             cy.get('div[class="rt-table"]')
             .find('div[class="rt-thead -filters"]')
             .find('div[class="rt-tr"]')
             .find('div[role="columnheader"]').first().type('Car')
 
+            //click View button for "Car MPG" problem
             cy.get('div[class="rt-table"]')
             .find('div[class="rt-tbody"]')
             .find('div[class="rt-tr-group"]').first()
@@ -137,7 +140,8 @@ describe('Demo Test Suite', () => {
             cy.get('button[id="answer"]').click()
             cy.get('button[id="note"]').click()
 
-            cy.get('textarea[id="note"]').should('contain', 'Scanning the answer choices indicates that you can do at least some estimation and still')
+            //verify the note and answer text has not changed
+            cy.get('textarea[id="note"]').should('contain', 'The car used 350 over 33 gallons of gasoline, so the cost was (350 over 33) ')
             cy.get('textarea[id="answer"]').should('contain', 'C. $30')
 
             //click the button again the text should hide
@@ -146,10 +150,51 @@ describe('Demo Test Suite', () => {
             cy.get('textarea[id="note"]').should('have.value', '')
             cy.get('textarea[id="answer"]').should('have.value', '')
 
+            //close the modal
             cy.get('button[id="close"]').click()
 
           })
     });
+
+    describe('Edit a problem', () => {
+        it('Should filter the \'Car MPG\' problem and edit it', () => {
+            cy.visit('http://localhost:3000')
+            cy.contains('Problem Set').click()
+            cy.contains('View Problem Sets').click()
+
+            //enter 'Car' into the Problem column
+            cy.get('div[class="rt-table"]')
+            .find('div[class="rt-thead -filters"]')
+            .find('div[class="rt-tr"]')
+            .find('div[role="columnheader"]').first().type('Car')
+
+            //table query results
+            cy.get('div[class="rt-table"]')
+            .find('div[class="rt-tbody"]')
+            .find('div[class="rt-tr-group"]').contains('Car').should(($tr) => {
+                expect($tr.length).to.be.greaterThan(0)
+            })
+
+            //view the 'Car MPG' entry by clicking the button
+            cy.get('div[class="rt-table"]')
+            .find('div[class="rt-tbody"]')
+            .find('div[class="rt-tr-group"]').first()
+            .find('button[id="view"]').click()
+
+            cy.get('textarea[id="question"]').clear()
+            cy.get('textarea[id="question"]').type('Car mpg edit test')
+            cy.get('button[id="save"]').click()
+            
+            //table query results
+            cy.get('div[class="rt-table"]')
+            .find('div[class="rt-tbody"]')
+            .find('div[class="rt-tr-group"]').contains('Car mpg edit test').should(($tr) => {
+                expect($tr.length).to.equal(1)
+            })
+
+        })
+    });
+
 
     describe('Remove a problem', () => {
         it('Should filter the \'Car MPG\' problem and remove it', () => {
@@ -157,24 +202,26 @@ describe('Demo Test Suite', () => {
             cy.contains('Problem Set').click()
             cy.contains('View Problem Sets').click()
 
+            //enter 'Car' into the Problem column
             cy.get('div[class="rt-table"]')
             .find('div[class="rt-thead -filters"]')
             .find('div[class="rt-tr"]')
             .find('div[role="columnheader"]').first().type('Car')
 
-            //it returns something
+            //table query results
             cy.get('div[class="rt-table"]')
             .find('div[class="rt-tbody"]')
             .find('div[class="rt-tr-group"]').contains('Car').should(($tr) => {
                 expect($tr.length).to.be.greaterThan(0)
             })
 
-            // remove 
+            //remove the 'Car MPG' entry by clicking the remove button
             cy.get('div[class="rt-table"]')
             .find('div[class="rt-tbody"]')
             .find('div[class="rt-tr-group"]').first()
             .find('button[id="remove"]').click()
 
+            //search again to verify 'Car MPG' has been deleted
             cy.get('div[class="rt-table"]')
             .find('div[class="rt-tbody"]')
             .find('div[class="rt-tr-group"]').contains('Car').should(($tr) => {
@@ -182,16 +229,5 @@ describe('Demo Test Suite', () => {
             })
         })
     });
-
-
-    describe('Edit a problem', () => {
-        it('Should filter the \'Car MPG\' problem and edit it', () => {
-
-        })
-    });
-
-
-
-
 
   })
